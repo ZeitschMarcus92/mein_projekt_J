@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://dein-repository-url.git'
+            }
+        }
+
+        stage('Build & Install') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('Package') {
+            steps {
+                sh 'mvn package'
+            }
+        }
+
+        stage('Develop-only stage') {
+            when {
+                branch 'develop'
+            }
+            steps {
+                echo 'Dies läuft nur auf dem develop-Branch'
+            }
+        }
+    }
+}
